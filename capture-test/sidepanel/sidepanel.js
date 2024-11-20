@@ -7,7 +7,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 document.getElementById('captureBtn').addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  
+
   // CSS 주입
   await chrome.scripting.insertCSS({
     target: { tabId: tab.id },
@@ -27,19 +27,19 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
         border: 2px solid #0095ff;
         background: rgba(0, 149, 255, 0.1);
       }
-    `
+    `,
   });
 
   // html2canvas 스크립트 주입
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    files: ['lib/html2canvas.min.js']
+    files: ['lib/html2canvas.min.js'],
   });
 
   // 캡처 로직 실행
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
-    function: initializeCapture
+    function: initializeCapture,
   });
 });
 
@@ -48,20 +48,20 @@ function displayCapturedImage(dataUrl) {
   const imageContainer = document.getElementById('imageContainer');
   const imgWrapper = document.createElement('div');
   imgWrapper.className = 'image-wrapper';
-  
+
   const img = document.createElement('img');
   img.src = dataUrl;
   img.className = 'captured-image';
-  
+
   const timestamp = new Date().toLocaleString();
   const caption = document.createElement('div');
   caption.className = 'image-caption';
   caption.textContent = timestamp;
-  
+
   imgWrapper.appendChild(img);
   imgWrapper.appendChild(caption);
   imageContainer.insertBefore(imgWrapper, imageContainer.firstChild);
-  
+
   // 로컬 스토리지에 저장
   saveToStorage(dataUrl, timestamp);
 }
@@ -82,15 +82,15 @@ window.addEventListener('load', async () => {
       const imageContainer = document.getElementById('imageContainer');
       const imgWrapper = document.createElement('div');
       imgWrapper.className = 'image-wrapper';
-      
+
       const img = document.createElement('img');
       img.src = dataUrl;
       img.className = 'captured-image';
-      
+
       const caption = document.createElement('div');
       caption.className = 'image-caption';
       caption.textContent = timestamp;
-      
+
       imgWrapper.appendChild(img);
       imgWrapper.appendChild(caption);
       imageContainer.appendChild(imgWrapper);
@@ -99,16 +99,18 @@ window.addEventListener('load', async () => {
 });
 
 function initializeCapture() {
-  let startX, startY, isSelecting = false;
+  let startX,
+    startY,
+    isSelecting = false;
   const overlay = document.createElement('div');
   overlay.className = 'capture-overlay';
-  
+
   const selection = document.createElement('div');
   selection.className = 'capture-selection';
-  
+
   document.body.appendChild(overlay);
   document.body.appendChild(selection);
-  
+
   overlay.addEventListener('mousedown', (e) => {
     isSelecting = true;
     startX = e.clientX;
@@ -116,29 +118,29 @@ function initializeCapture() {
     selection.style.left = startX + 'px';
     selection.style.top = startY + 'px';
   });
-  
+
   overlay.addEventListener('mousemove', (e) => {
     if (!isSelecting) return;
-    
+
     const currentX = e.clientX;
     const currentY = e.clientY;
-    
+
     const width = currentX - startX;
     const height = currentY - startY;
-    
+
     selection.style.width = Math.abs(width) + 'px';
     selection.style.height = Math.abs(height) + 'px';
     selection.style.left = (width < 0 ? currentX : startX) + 'px';
     selection.style.top = (height < 0 ? currentY : startY) + 'px';
   });
-  
+
   overlay.addEventListener('mouseup', async (e) => {
     isSelecting = false;
-    
+
     const rect = selection.getBoundingClientRect();
     const scrollX = window.scrollX;
     const scrollY = window.scrollY;
-    
+
     try {
       // html2canvas가 전역으로 사용 가능
       const screenshot = await html2canvas(document.body, {
@@ -149,14 +151,14 @@ function initializeCapture() {
         width: rect.width,
         height: rect.height,
         logging: false,
-        useCORS: true
+        useCORS: true,
       });
-      
+
       const dataUrl = screenshot.toDataURL();
-      
-      chrome.runtime.sendMessage({ 
-        type: 'displayImage', 
-        dataUrl: dataUrl 
+
+      chrome.runtime.sendMessage({
+        type: 'displayImage',
+        dataUrl: dataUrl,
       });
     } catch (error) {
       console.error('캡처 중 오류 발생:', error);
