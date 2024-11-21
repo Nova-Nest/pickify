@@ -111,30 +111,35 @@ function initializeCapture() {
   document.body.appendChild(overlay);
   document.body.appendChild(selection);
 
-  overlay.addEventListener('mousedown', (e) => {
+  const startSelecting = (e) => {
     isSelecting = true;
     startX = e.clientX;
     startY = e.clientY;
     selection.style.left = startX + 'px';
     selection.style.top = startY + 'px';
-  });
+  };
 
-  overlay.addEventListener('mousemove', (e) => {
-    if (!isSelecting) return;
+  let throttleTimer;
+  const updateSelection = (e) => {
+    if (!isSelecting || throttleTimer) return;
 
-    const currentX = e.clientX;
-    const currentY = e.clientY;
+    throttleTimer = setTimeout(() => {
+      const currentX = e.clientX;
+      const currentY = e.clientY;
 
-    const width = currentX - startX;
-    const height = currentY - startY;
+      const width = currentX - startX;
+      const height = currentY - startY;
 
-    selection.style.width = Math.abs(width) + 'px';
-    selection.style.height = Math.abs(height) + 'px';
-    selection.style.left = (width < 0 ? currentX : startX) + 'px';
-    selection.style.top = (height < 0 ? currentY : startY) + 'px';
-  });
+      selection.style.width = Math.abs(width) + 'px';
+      selection.style.height = Math.abs(height) + 'px';
+      selection.style.left = (width < 0 ? currentX : startX) + 'px';
+      selection.style.top = (height < 0 ? currentY : startY) + 'px';
 
-  overlay.addEventListener('mouseup', async (e) => {
+      throttleTimer = null;
+    }, 16); // 약 60fps를 기준으로 설정
+  };
+
+  const completeSelection = async (e) => {
     isSelecting = false;
 
     const rect = selection.getBoundingClientRect();
@@ -152,6 +157,9 @@ function initializeCapture() {
         height: rect.height,
         logging: false,
         useCORS: true,
+        scale: 1, // 스케일 조정 (기본값: 2, 낮추면 성능 개선)
+        scrollX: 0, // 캔버스 스크롤 조정
+        scrollY: 0,
       });
 
       const dataUrl = screenshot.toDataURL();
@@ -162,9 +170,14 @@ function initializeCapture() {
       });
     } catch (error) {
       console.error('캡처 중 오류 발생:', error);
-    }
+    } finally {
+      overlay.remove();
+      selection.remove();
 
-    overlay.remove();
-    selection.remove();
-  });
+      // 이벤트 리스너 제거
+      overlay.removeEventListener('mousedown', startSelecting);
+      overlay.removeEventListener('mousemove', updateSelection);
+      overlay.removeEventListener('mouseup', completeSelection);
+    }
+  };
 }
