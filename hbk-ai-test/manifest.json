@@ -1,13 +1,20 @@
 {
+  "manifest_version": 3,
   "name": "HBK Google Gemini Demo",
   "version": "0.1",
-  "manifest_version": 3,
   "description": "Try the Gemini Models.",
   "background": {
     "service_worker": "background.js"
   },
   "permissions": [
-    "sidePanel"
+    "activeTab",
+    "scripting",
+    "sidePanel",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "side_panel": {
     "default_path": "sidepanel/index.html"

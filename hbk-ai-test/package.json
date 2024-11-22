@@ -1,12 +1,18 @@
 {
   "name": "Chrome Extensions Gemini Demo",
   "version": "1.0",
+  "type": "module",
   "scripts": {
-    "build": "rollup sidepanel/index.js --file dist/sidepanel.bundle.js --format iife"
+    "build": "rollup -c"
   },
   "private": true,
   "devDependencies": {
     "@google/generative-ai": "0.15.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
     "rollup": "4.22.4"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.1.3"
   }
 }

@@ -80,3 +80,70 @@ textarea {
 [hidden] {
   display: none;
 }
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.button-container button {
+  flex: 1;
+  padding: 8px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+#captured-image-container {
+  width: 100%;
+  min-height: 100px;
+  border: 1px dashed #ccc;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#captured-image {
+  max-width: 100%;
+  height: auto;
+}
+
+textarea {
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.analysis-container {
+  margin-top: 20px;
+}
+
+.analysis-result {
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  white-space: pre-wrap;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #dc3545;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.blink {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+  100% { opacity: 1; }
+}
