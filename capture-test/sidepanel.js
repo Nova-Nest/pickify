@@ -6,6 +6,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 document.getElementById('captureBtn').addEventListener('click', async () => {
+  console.log('captureBtn clicked');
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   
   // CSS 주입
@@ -26,16 +27,10 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
         position: absolute;
         border: 2px solid #0095ff;
         background: rgba(0, 149, 255, 0.1);
+        z-index: 99999;
       }
     `
   });
-
-  // html2canvas 스크립트 주입
-  await chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    files: ['lib/html2canvas.min.js']
-  });
-
   // 캡처 로직 실행
   await chrome.scripting.executeScript({
     target: { tabId: tab.id },
@@ -109,7 +104,28 @@ function initializeCapture() {
   document.body.appendChild(overlay);
   document.body.appendChild(selection);
   
-  overlay.addEventListener('mousedown', (e) => {
+  overlay.addEventListener('pointerup', async (e) => {
+    if (!isSelecting) return;
+    isSelecting = false;
+    
+    const rect = selection.getBoundingClientRect();
+    
+    // 캡처 요청을 사이드패널로 전송
+    chrome.runtime.sendMessage({ 
+      type: 'requestCapture', 
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height
+      }
+    });
+
+    overlay.remove();
+    selection.remove();
+  });
+  
+  overlay.addEventListener('pointerdown', (e) => {
     isSelecting = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -117,7 +133,7 @@ function initializeCapture() {
     selection.style.top = startY + 'px';
   });
   
-  overlay.addEventListener('mousemove', (e) => {
+  overlay.addEventListener('pointermove', (e) => {
     if (!isSelecting) return;
     
     const currentX = e.clientX;
@@ -131,38 +147,34 @@ function initializeCapture() {
     selection.style.left = (width < 0 ? currentX : startX) + 'px';
     selection.style.top = (height < 0 ? currentY : startY) + 'px';
   });
-  
-  overlay.addEventListener('mouseup', async (e) => {
-    isSelecting = false;
-    
-    const rect = selection.getBoundingClientRect();
-    const scrollX = window.scrollX;
-    const scrollY = window.scrollY;
-    
+}
+
+// 사이드패널에서 캡처 처리
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+  if (message.type === 'requestCapture') {
     try {
-      // html2canvas가 전역으로 사용 가능
-      const screenshot = await html2canvas(document.body, {
-        windowWidth: document.documentElement.scrollWidth,
-        windowHeight: document.documentElement.scrollHeight,
-        x: rect.left + scrollX,
-        y: rect.top + scrollY,
-        width: rect.width,
-        height: rect.height,
-        logging: false,
-        useCORS: true
-      });
+      const dataUrl = await chrome.tabs.captureVisibleTab(null, {format: 'png'});
       
-      const dataUrl = screenshot.toDataURL();
+      const img = new Image();
+      img.src = dataUrl;
+      await new Promise(resolve => img.onload = resolve);
       
-      chrome.runtime.sendMessage({ 
-        type: 'displayImage', 
-        dataUrl: dataUrl 
-      });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = message.rect.width;
+      canvas.height = message.rect.height;
+      
+      ctx.drawImage(img, 
+        message.rect.left, message.rect.top, 
+        message.rect.width, message.rect.height,
+        0, 0, message.rect.width, message.rect.height
+      );
+      
+      const croppedDataUrl = canvas.toDataURL();
+      displayCapturedImage(croppedDataUrl);
+      
     } catch (error) {
       console.error('캡처 중 오류 발생:', error);
     }
-
-    overlay.remove();
-    selection.remove();
-  });
-}
+  }
+});
