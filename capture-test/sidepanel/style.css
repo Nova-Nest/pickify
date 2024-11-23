@@ -125,7 +125,7 @@ li {
   border-radius: 50px 50px 0 0;
   flex-grow: 1;
   overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 /* 관련 탭 */
@@ -163,6 +163,7 @@ div[role='tablist'] button {
   padding: 0 28px;
   gap: 8px;
   width: calc(100% - 56px);
+  overflow-y: auto;
 }
 
 .relatedImageList li {
