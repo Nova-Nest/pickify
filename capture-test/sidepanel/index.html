@@ -2,11 +2,85 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" type="text/css" href="style.css" />
   </head>
   <body>
-    <button id="captureBtn">영역 캡쳐하기</button>
-    <div id="imageContainer"></div>
+    <div class="mainContainer">
+      <!-- 방금 캡쳐한 이미지 -->
+      <div class="nowCapturedImage noImage">
+        <!-- <img
+        src="https://cdn.pixabay.com/photo/2020/03/18/05/51/mac-4942769_1280.png"
+        alt="방금 캡쳐한 이미지"
+      /> -->
+        <button type="button">
+          <img src="./images/x.svg" alt="delete icon" />
+        </button>
+      </div>
+      <!-- 캡쳐버튼 -->
+      <button id="captureBtn" type="button">
+        <img src="./images/screenshot.svg" alt="screenshot icon" />
+        take a screenshot
+      </button>
+
+      <!-- 검색 결과 및 탭 -->
+      <div class="searchResult">
+        <div role="tablist">
+          <button
+            type="button"
+            id="relatedImgButton"
+            role="tab"
+            onclick="clickTab(event)"
+            class="selectedTab"
+          >
+            Related Image
+          </button>
+          <button
+            type="button"
+            id="recommendCombinationButton"
+            role="tab"
+            onclick="clickTab(event)"
+          >
+            Recommend Commbination
+          </button>
+        </div>
+
+        <!-- 이미지 검색 결과 리스트 -->
+        <ul class="relatedImageList">
+          <li role="button" id="related0">
+            <img
+              src="https://cdn.pixabay.com/photo/2020/03/18/05/51/mac-4942769_1280.png"
+              alt="검색결과0 이미지"
+            />
+            <a
+              class="itemInfo"
+              href="https://www.ilovepc.co.kr/news/articleView.html?idxno=42234"
+              target="_blank"
+            >
+              <h3>상품이름</h3>
+              <div>상품파는 사이트 (있으면 추가)</div>
+            </a>
+          </li>
+          <li role="button" id="related1">
+            <img
+              src="https://www.ilovepc.co.kr/news/photo/202201/42234_99311_126.jpg"
+              alt="검색결과1 이미지"
+            />
+          </li>
+        </ul>
+
+        <!-- 추천 조합 응답 -->
+        <div class="relatedImageList"></div>
+
+        <!-- 내가 캡쳐한 목록 리스트 ? -->
+        <ul class="capturedImageList"></ul>
+      </div>
+    </div>
     <script src="../lib/html2canvas.min.js"></script>
     <script src="sidepanel.js"></script>
   </body>

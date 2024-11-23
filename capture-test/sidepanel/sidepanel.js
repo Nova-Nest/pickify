@@ -1,3 +1,12 @@
+function clickTab(event) {
+  const id = event.target.id;
+  const nowSelectedTab = document.querySelector(`#${id}`);
+  const prevSelectedTab = document.querySelector(`.selectedTab`);
+  if (prevSelectedTab == nowSelectedTab) return;
+  nowSelectedTab.className = 'selectedTab';
+  prevSelectedTab.className = '';
+}
+
 // 메시지 리스너 추가
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === 'displayImage') {
@@ -18,14 +27,15 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: rgba(0, 0, 0, 0.3);
         cursor: crosshair;
         z-index: 999999;
       }
       .capture-selection {
         position: absolute;
-        border: 2px solid #0095ff;
-        background: rgba(0, 149, 255, 0.1);
+        border: 1px dashed #E1FF3D;
+        background: transparent;
+        box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+        z-index: 9999999;
       }
     `,
   });
@@ -45,7 +55,7 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
 
 // 캡처된 이미지를 사이드패널에 표시하는 함수
 function displayCapturedImage(dataUrl) {
-  const imageContainer = document.getElementById('imageContainer');
+  const capturedImageList = document.querySelector('.capturedImageList');
   const imgWrapper = document.createElement('div');
   imgWrapper.className = 'image-wrapper';
 
@@ -54,13 +64,16 @@ function displayCapturedImage(dataUrl) {
   img.className = 'captured-image';
 
   const timestamp = new Date().toLocaleString();
-  const caption = document.createElement('div');
+  const caption = document.createElement('time');
   caption.className = 'image-caption';
   caption.textContent = timestamp;
 
   imgWrapper.appendChild(img);
   imgWrapper.appendChild(caption);
-  imageContainer.insertBefore(imgWrapper, imageContainer.firstChild);
+  capturedImageList.insertBefore(imgWrapper, capturedImageList.firstChild);
+  // const fragment = document.createDocumentFragment();
+  // fragment.appendChild(imgWrapper);
+  // capturedImageList.prepend(fragment);
 
   // 로컬 스토리지에 저장
   saveToStorage(dataUrl, timestamp);
@@ -79,7 +92,7 @@ window.addEventListener('load', async () => {
   const storage = await chrome.storage.local.get('capturedImages');
   if (storage.capturedImages) {
     storage.capturedImages.forEach(({ dataUrl, timestamp }) => {
-      const imageContainer = document.getElementById('imageContainer');
+      const capturedImageList = document.querySelector('.capturedImageList');
       const imgWrapper = document.createElement('div');
       imgWrapper.className = 'image-wrapper';
 
@@ -93,7 +106,7 @@ window.addEventListener('load', async () => {
 
       imgWrapper.appendChild(img);
       imgWrapper.appendChild(caption);
-      imageContainer.appendChild(imgWrapper);
+      capturedImageList.appendChild(imgWrapper);
     });
   }
 });
