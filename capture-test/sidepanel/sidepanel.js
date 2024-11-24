@@ -117,28 +117,28 @@ function initializeCapture() {
 
   document.body.appendChild(overlay);
   document.body.appendChild(selection);
-  
+
   overlay.addEventListener('pointerup', async (e) => {
     if (!isSelecting) return;
     isSelecting = false;
-    
+
     const rect = selection.getBoundingClientRect();
-    
+
     // 캡처 요청을 사이드패널로 전송
-    chrome.runtime.sendMessage({ 
-      type: 'requestCapture', 
+    chrome.runtime.sendMessage({
+      type: 'requestCapture',
       rect: {
         left: rect.left,
         top: rect.top,
         width: rect.width,
-        height: rect.height
-      }
+        height: rect.height,
+      },
     });
 
     overlay.remove();
     selection.remove();
   });
-  
+
   overlay.addEventListener('pointerdown', (e) => {
     isSelecting = true;
     startX = e.clientX;
@@ -146,16 +146,16 @@ function initializeCapture() {
     selection.style.left = startX + 'px';
     selection.style.top = startY + 'px';
   });
-  
+
   overlay.addEventListener('pointermove', (e) => {
     if (!isSelecting) return;
-    
+
     const currentX = e.clientX;
     const currentY = e.clientY;
-    
+
     const width = currentX - startX;
     const height = currentY - startY;
-    
+
     selection.style.width = Math.abs(width) + 'px';
     selection.style.height = Math.abs(height) + 'px';
     selection.style.left = (width < 0 ? currentX : startX) + 'px';
@@ -167,26 +167,31 @@ function initializeCapture() {
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.type === 'requestCapture') {
     try {
-      const dataUrl = await chrome.tabs.captureVisibleTab(null, {format: 'png'});
-      
+      const dataUrl = await chrome.tabs.captureVisibleTab(null, { format: 'png' });
+
       const img = new Image();
       img.src = dataUrl;
-      await new Promise(resolve => img.onload = resolve);
-      
+      await new Promise((resolve) => (img.onload = resolve));
+
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       canvas.width = message.rect.width;
       canvas.height = message.rect.height;
-      
-      ctx.drawImage(img, 
-        message.rect.left, message.rect.top, 
-        message.rect.width, message.rect.height,
-        0, 0, message.rect.width, message.rect.height
+
+      ctx.drawImage(
+        img,
+        message.rect.left,
+        message.rect.top,
+        message.rect.width,
+        message.rect.height,
+        0,
+        0,
+        message.rect.width,
+        message.rect.height
       );
-      
+
       const croppedDataUrl = canvas.toDataURL();
       displayCapturedImage(croppedDataUrl);
-      
     } catch (error) {
       console.error('캡처 중 오류 발생:', error);
     } finally {
@@ -198,5 +203,5 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       overlay.removeEventListener('mousemove', updateSelection);
       overlay.removeEventListener('mouseup', completeSelection);
     }
-  };
-}
+  }
+});

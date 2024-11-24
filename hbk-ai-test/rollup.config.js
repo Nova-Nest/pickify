@@ -6,22 +6,16 @@ export default [
     input: 'sidepanel/capture.js',
     output: {
       file: 'dist/capture.bundle.js',
-      format: 'iife'
+      format: 'iife',
     },
-    plugins: [
-      resolve(),
-      commonjs()
-    ]
+    plugins: [resolve(), commonjs()],
   },
   {
-    input: 'sidepanel/analyze.js',
+    input: 'sidepanel/buttons.js',
     output: {
-      file: 'dist/analyze.bundle.js',
-      format: 'iife'
+      file: 'dist/buttons.bundle.js',
+      format: 'iife',
     },
-    plugins: [
-      resolve(),
-      commonjs()
-    ]
-  }
+    plugins: [resolve(), commonjs()],
+  },
 ];

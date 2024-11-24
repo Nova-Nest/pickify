@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "HBK Google Gemini Demo",
+  "name": "HBK 스타일 수정 Google Gemini Demo",
   "version": "0.1",
   "description": "Try the Gemini Models.",
   "background": {
