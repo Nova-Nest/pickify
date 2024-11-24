@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="index.css" />
+  </head>
+  <body>
+    <h1>이미지 분석</h1>
+    
+    <!-- 버튼 영역 -->
+    <div class="button-container">
+      <button id="capture-button" class="primary">새로 캡처하기</button>
+      <button id="analyze-button" class="primary">분석하기</button>
+    </div>
+
+    <!-- 캡처된 이미지 표시 영역 -->
+    <div id="imageContainer"></div>
+
+    <!-- 분석 결과 표시 영역 -->
+    <div class="analysis-container">
+      <div id="loading" class="text" hidden><span class="blink">분석 중...</span></div>
+      <div id="error" class="text error-message" hidden></div>
+      <div id="analysisResult" class="analysis-result" hidden></div>
+    </div>
+    
+    <script src="../dist/capture.bundle.js"></script>
+    <script src="../dist/analyze.bundle.js"></script>
+  </body>
+</html>
