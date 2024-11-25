@@ -12,8 +12,8 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100svh;
         cursor: crosshair;
         z-index: 999999;
       }
@@ -51,6 +51,7 @@ function initializeCapture() {
 
   // pointerdown시 실행 함수
   const startSelecting = (e) => {
+    console.log('start', e);
     isSelecting = true;
     startX = e.clientX;
     startY = e.clientY;
@@ -58,9 +59,8 @@ function initializeCapture() {
     selection.style.top = startY + 'px';
   };
 
-  // pointermove시 실행 함수
-  // let throttleTimer;
   const updateSelection = (e) => {
+    console.log('move', e);
     if (!isSelecting) return;
     const currentX = e.clientX;
     const currentY = e.clientY;
@@ -72,24 +72,16 @@ function initializeCapture() {
     selection.style.height = Math.abs(height) + 'px';
     selection.style.left = (width < 0 ? currentX : startX) + 'px';
     selection.style.top = (height < 0 ? currentY : startY) + 'px';
-    // throttleTimer = setTimeout(() => {
-
-    //   throttleTimer = null;
-    // }, 16); // 약 60fps를 기준으로 설정
   };
 
   // pointerup시 실행 함수
   const completeSelection = async (e) => {
     console.log(isSelecting, 'isSelecting');
-    console.log(isSelecting, 'mouseup');
+    console.log(e, 'mouseup');
     if (!isSelecting) {
       // 돔요소 없애기
       overlay.remove();
       selection.remove();
-      // 이벤트 리스너 제거
-      overlay.removeEventListener('mousedown', startSelecting);
-      overlay.removeEventListener('mousemove', updateSelection);
-      overlay.removeEventListener('mouseup', completeSelection);
       return;
     }
     isSelecting = false;
@@ -131,23 +123,23 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
-      canvas.width = 1280;
-      canvas.height = 2280;
-      // canvas.width = message.rect.width;
-      // canvas.height = message.rect.height;
+      // canvas.width = 1280;
+      // canvas.height = 2280;
+      canvas.width = message.rect.width;
+      canvas.height = message.rect.height;
 
-      ctx.drawImage(img, 0, 0);
-      // ctx.drawImage(
-      //   img,
-      //   message.rect.left,
-      //   message.rect.top,
-      //   message.rect.width,
-      //   message.rect.height,
-      //   0,
-      //   0,
-      //   message.rect.width,
-      //   message.rect.height
-      // );
+      // ctx.drawImage(img, 0, 0);
+      ctx.drawImage(
+        img,
+        message.rect.left,
+        message.rect.top,
+        message.rect.width,
+        message.rect.height,
+        0,
+        0,
+        message.rect.width,
+        message.rect.height
+      );
 
       const croppedDataUrl = canvas.toDataURL();
       displayCapturedImage(croppedDataUrl);

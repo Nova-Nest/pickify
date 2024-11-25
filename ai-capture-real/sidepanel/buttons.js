@@ -1,4 +1,3 @@
-// 캡쳐이미지 없애기
 document.getElementById('deleteButton').addEventListener('click', () => {});
 
 function clickDeleteButton() {

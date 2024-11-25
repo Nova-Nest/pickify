@@ -44,7 +44,7 @@ async function dataUrlToGenerativePart(dataUrl) {
 // Analyze 버튼 클릭 이벤트 핸들러
 document.getElementById('analyze-button').addEventListener('click', async () => {
   try {
-    console.log()
+    console.log();
     // 저장된 이미지 가져오기
     const storage = await chrome.storage.local.get('capturedImage');
     if (!storage.capturedImage) {
@@ -58,7 +58,7 @@ document.getElementById('analyze-button').addEventListener('click', async () => 
     const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const prompt =
-      "What's in this image? And can you recommend a product that goes well with it and give me the link to the image and the url where the image is located? For example, if there is a knit in the image, I would like to recommend pants that match it, and if there is a MacBook, I would like to recommend a trick pad.";
+      "What's in this image? And can you recommend products that goes well with it? For example, if there is a knit in the image, I would like to recommend pants that match it, and if there is a MacBook, I would like to recommend a mouse.";
     const imagePart = await dataUrlToGenerativePart(dataUrl);
 
     const result = await model.generateContent([prompt, imagePart]);
