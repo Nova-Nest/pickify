@@ -41,7 +41,7 @@ li {
   margin: 16px auto;
   height: fit-content;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   border-radius: 30px;
   display: flex;
   justify-content: center;
@@ -67,8 +67,8 @@ li {
 #nowCapturedImage > img {
   position: relative;
   max-width: 100%;
-  object-fit: contain;
-  object-position: center;
+  /* object-fit: contain; */
+  /* object-position: center; */
 }
 
 /* x버튼 */
