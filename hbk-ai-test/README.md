@@ -32,3 +32,11 @@ The extension provides a chat interface for the Gemini API. To learn more about 
 11. 캡처된 이미지는 로컬 스토리지에 저장됩니다.
 12. 분석 버튼을 통해 캡처된 이미지를 분석합니다.
 13. 분석 결과는 사이드패널에 표시됩니다.
+
+### 이미지 업로드
+1. 백엔드에서 Signed URL을 받아옵니다.
+2. Signed URL로 이미지를 업로드합니다.
+
+### Todo
+- 확장자는 어떻게 할지
+- backend ip 주소 환경변수로 관리
