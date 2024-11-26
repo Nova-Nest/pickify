@@ -1,16 +1,16 @@
-document.getElementById('deleteButton').addEventListener('click', () => {});
+const clickTab = (event) => {
+  const id = event.target.id;
+  const nowSelectedTab = document.querySelector(`#${id}`);
+  const prevSelectedTab = document.querySelector(`.selectedTab`);
+  if (prevSelectedTab == nowSelectedTab) return;
+  nowSelectedTab.className = "selectedTab";
+  prevSelectedTab.className = "";
+  if (id == "recommendCombinationButton") {
+    // 여기에 분석하기 에 해당하는 함수 부르기!
+  }
+};
 
-function clickDeleteButton() {
-  console.log('클릭 딜리트 버튼');
-  const nowCapturedImage = document.getElementById('nowCapturedImage');
-  console.log(nowCapturedImage, 'nowCapturedImage');
-  nowCapturedImage.innerHTML = '';
-  nowCapturedImage.className = 'noImage';
-
-  chrome.storage.local.set({
-    capturedImage: {
-      dataUrl: '',
-      timestamp: '',
-    },
-  });
-}
+document.getElementById("relatedImgButton").addEventListener("click", clickTab);
+document
+  .getElementById("recommendCombinationButton")
+  .addEventListener("click", clickTab);
