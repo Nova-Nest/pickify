@@ -39,39 +39,103 @@ document.getElementById('capture-button').addEventListener('click', async () => 
 });
 
 // 캡처된 이미지를 사이드패널에 표시하는 함수
-function displayCapturedImage(dataUrl) {
-  const imageContainer = document.getElementById('imageContainer');
-  // 기존 내용 초기화
-  imageContainer.innerHTML = '';
-  
-  const imgWrapper = document.createElement('div');
-  imgWrapper.className = 'image-wrapper';
-  
-  const img = document.createElement('img');
-  img.src = dataUrl;
-  img.className = 'captured-image';
-  
-  const timestamp = new Date().toLocaleString();
-  const caption = document.createElement('div');
-  caption.className = 'image-caption';
-  caption.textContent = timestamp;
-  
-  imgWrapper.appendChild(img);
-  imgWrapper.appendChild(caption);
-  imageContainer.replaceChildren(imgWrapper);
-  
-  // 로컬 스토리지에 저장
-  saveToStorage(dataUrl, timestamp);
+async function displayCapturedImage(dataUrl) {
+  try {
+    const imageContainer = document.getElementById('imageContainer');
+    if (!imageContainer) {
+      console.error('이미지 컨테이너를 찾을 수 없습니다');
+      return;
+    }
+    
+    imageContainer.innerHTML = '';
+    
+    const imgWrapper = document.createElement('div');
+    imgWrapper.className = 'image-wrapper';
+    
+    const img = document.createElement('img');
+    img.src = dataUrl;
+    img.className = 'captured-image';
+    
+    const timestamp = new Date().toLocaleString();
+    const caption = document.createElement('div');
+    caption.className = 'image-caption';
+    caption.textContent = '업로드 중...';
+    
+    imgWrapper.appendChild(img);
+    imgWrapper.appendChild(caption);
+    imageContainer.appendChild(imgWrapper);
+
+    // Base64 이미지를 Blob으로 변환
+    const response = await fetch(dataUrl);
+    if (!response.ok) throw new Error('이미지 변환 실패');
+    const blob = await response.blob();
+    
+    // 파일명 생성
+    // todo filename, 확장자를 뭐로하지.. 
+    // 우선 백엔드에서 만들자... uuid로
+    // 확장자는 png로?
+    const filename = `capture-${Date.now()}.png`;
+
+    try {
+      // 백엔드에서 Signed URL 받아오기
+      const urlResponse = await fetch(
+        `http://34.64.53.95:8080/signedUrl?contentType=${blob.type}&minutes=10`,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          }
+        }
+      );
+
+      if (!urlResponse.ok) {
+        throw new Error('Signed URL 받아오기 실패');
+      }
+
+      const { signedUrl } = await urlResponse.json();
+
+      console.log(signedUrl);
+
+      // Signed URL로 이미지 업로드
+      const uploadResponse = await fetch(signedUrl, {
+        method: 'PUT',
+        body: blob,
+        headers: {
+          'Content-Type': blob.type,
+        },
+      });
+
+      if (uploadResponse.ok) {
+        console.log('이미지 업로드 성공!');
+        caption.textContent = `${timestamp} (업로드 완료)`;
+      } else {
+        throw new Error('이미지 업로드 실패');
+      }
+    } catch (error) {
+      console.error('업로드 과정 중 오류:', error);
+      caption.textContent = `${timestamp} (업로드 실패: ${error.message})`;
+    }
+
+    // 로컬 스토리지에 저장
+    await saveToStorage(dataUrl, timestamp);
+    
+  } catch (error) {
+    console.error('전체 프로세스 오류:', error);
+  }
 }
 
 // 로컬 스토리지에 이미지 저장
 async function saveToStorage(dataUrl, timestamp) {
-  await chrome.storage.local.set({ 
-    capturedImages: { 
-      dataUrl, 
-      timestamp 
-    } 
-  });
+  try {
+    await chrome.storage.local.set({ 
+      capturedImages: { 
+        dataUrl, 
+        timestamp 
+      } 
+    });
+  } catch (error) {
+    console.error('스토리지 저장 실패:', error);
+  }
 }
 
 // 페이지 로드시 저장된 이미지 불러오기
