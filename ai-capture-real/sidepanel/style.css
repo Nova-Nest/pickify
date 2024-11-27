@@ -6,7 +6,7 @@ body {
   padding: 16px 0 0;
   box-sizing: border-box;
   background-color: #010101;
-  font-family: 'Roboto', '-apple-system', 'BlinkMacSystemFont', sans-serif;
+  font-family: "Roboto", "-apple-system", "BlinkMacSystemFont", sans-serif;
   font-weight: 600;
   position: relative;
 }
@@ -56,17 +56,17 @@ li {
 }
 
 .noImage::after {
-  content: '';
+  content: "";
   display: flex;
   width: 38px;
   height: 38px;
 
-  background: url('../images/gallery.svg') no-repeat;
+  background: url("../images/gallery.svg") no-repeat;
 }
 
 #nowCapturedImage > img {
   position: relative;
-  max-width: 100%;
+  width: 100%;
   /* object-fit: contain; */
   /* object-position: center; */
 }
@@ -88,7 +88,7 @@ li {
   z-index: 10;
 }
 #nowCapturedImage:not(.noImage):hover::after {
-  content: '';
+  content: "";
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
@@ -134,7 +134,7 @@ li {
 }
 
 /* 관련 탭 */
-div[role='tablist'] {
+div[role="tablist"] {
   width: calc(100% - 38px);
   overflow-x: auto;
   display: flex;
@@ -143,7 +143,7 @@ div[role='tablist'] {
   margin: 0;
   padding: 30px 10px 10px 28px;
 }
-div[role='tablist'] button {
+div[role="tablist"] button {
   height: 44px;
   padding: 16px;
   display: flex;
