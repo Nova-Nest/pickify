@@ -149,47 +149,28 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
       const img = new Image();
       img.src = dataUrl;
-      await new Promise((resolve) => (img.onload = resolve));
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = message.rect.width;
+        canvas.height = message.rect.height;
+        
+        ctx.drawImage(
+          img,
+          message.rect.left * message.window.devicePixelRatio,
+          message.rect.top * message.window.devicePixelRatio,
+          message.rect.width * message.window.devicePixelRatio,
+          message.rect.height * message.window.devicePixelRatio,
+          0,
+          0,
+          message.rect.width,
+          message.rect.height
+        );
 
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-
-      // canvas.width = 1280;
-      // canvas.height = 2280;
-      // canvas.width = message.rect.width;
-      // canvas.height = message.rect.height;
-
-      // ctx.drawImage(
-      //   img,
-      //   message.rect.left,
-      //   message.rect.top,
-      //   message.rect.width,
-      //   message.rect.height,
-      //   0,
-      //   0,
-      //   message.rect.width,
-      //   message.rect.height
-      // );
-
-      const scale = message.window.devicePixelRatio; // 디바이스 픽셀 배율
-      canvas.width = message.rect.width * scale;
-      canvas.height = message.rect.height * scale;
-      ctx.scale(scale, scale);
-      // 이랬더니 스크롤을 더했더니 훨씬 밑에를 캡쳐함 - 아까는 위를 캡쳐했는데
-      ctx.drawImage(
-        img,
-        (message.rect.left + message.window.scrollX) * scale,
-        (message.rect.top + message.window.scrollY) * scale,
-        message.rect.width * scale,
-        message.rect.height * scale,
-        0,
-        0,
-        canvas.width,
-        canvas.height
-      );
-
-      const croppedDataUrl = canvas.toDataURL();
-      displayCapturedImage(croppedDataUrl);
+        const croppedDataUrl = canvas.toDataURL();
+        displayCapturedImage(croppedDataUrl);
+      };
     } catch (error) {
       console.error('캡처 중 오류 발생:', error);
     }
