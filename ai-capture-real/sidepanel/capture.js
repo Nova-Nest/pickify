@@ -69,8 +69,8 @@ function initializeCapture() {
     isSelecting = true;
     startX = e.clientX;
     startY = e.clientY;
-    selection.style.left = startX + 'px';
-    selection.style.top = startY + 'px';
+    selection.style.left = clientX + 'px';
+    selection.style.top = clientY + 'px';
   };
 
   const updateSelection = (e) => {
@@ -210,7 +210,9 @@ function displayCapturedImage(dataUrl) {
   saveToStorage(dataUrl, timestamp);
 
   // x버튼에 캡쳐이미지 없애기 함수 걸기
-  document.getElementById('deleteButton').addEventListener('click', clickDeleteButton);
+  document
+    .getElementById('deleteButton')
+    .addEventListener('click', clickDeleteButton);
 }
 
 // 로컬 스토리지에 이미지 저장하는 함수
