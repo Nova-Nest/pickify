@@ -41,11 +41,12 @@ li {
   margin: 16px auto;
   height: fit-content;
   position: relative;
-  /* overflow: hidden; */
+  overflow: hidden;
   border-radius: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: content-box;
 }
 
 /* 이미지 없을 때 기본 박스 */
@@ -66,7 +67,7 @@ li {
 
 #nowCapturedImage > img {
   position: relative;
-  max-width: 100%;
+  width: 100%;
   /* object-fit: contain; */
   /* object-position: center; */
 }
