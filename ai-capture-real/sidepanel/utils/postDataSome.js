@@ -1,11 +1,11 @@
-export async function getData(url) {
+export async function postDataSome(url, data) {
   try {
-    // GET 요청
     const response = await fetch('http://34.64.53.95:8080' + url, {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data),
     });
 
     if (!response.ok) {
@@ -13,9 +13,10 @@ export async function getData(url) {
     }
 
     const result = await response.json(); // 응답 데이터 처리
-    console.log('응답 결과:', result);
-    return result;
+    console.log('요청 url', url, '응답 결과:', result);
+    return response;
   } catch (error) {
-    console.error('GET 요청 실패:', error);
+    console.error('요청 url', url, 'POST 요청 실패:', error);
+    throw error;
   }
 }

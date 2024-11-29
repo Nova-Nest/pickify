@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "HBK 스타일 수정 Google Gemini Demo",
+  "name": "Pickify",
   "version": "0.1",
   "description": "Try the Gemini Models.",
   "background": {
@@ -11,13 +11,15 @@
     "scripting",
     "sidePanel",
     "storage",
-    "tabs"
+    "tabs",
+    "http://34.64.53.95:8080/*"
   ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "host_permissions": ["<all_urls>"],
   "side_panel": {
     "default_path": "sidepanel/index.html"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src http://34.64.53.95:8080"
   },
   "action": {
     "default_icon": {
