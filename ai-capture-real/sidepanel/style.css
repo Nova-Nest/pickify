@@ -6,7 +6,7 @@ body {
   padding: 16px 0 0;
   box-sizing: border-box;
   background-color: #010101;
-  font-family: 'Roboto', '-apple-system', 'BlinkMacSystemFont', sans-serif;
+  font-family: "Roboto", "-apple-system", "BlinkMacSystemFont", sans-serif;
   font-weight: 600;
   position: relative;
 }
@@ -33,6 +33,7 @@ li {
   flex-direction: column;
   height: 100%;
   width: 100%;
+  overflow-y: hidden;
 }
 
 /* ------활성화된 캡쳐 이미지 영역------ */
@@ -57,12 +58,12 @@ li {
 }
 
 .noImage::after {
-  content: '';
+  content: "";
   display: flex;
   width: 38px;
   height: 38px;
 
-  background: url('../images/gallery.svg') no-repeat;
+  background: url("../images/gallery.svg") no-repeat;
 }
 
 #nowCapturedImage > img {
@@ -89,7 +90,7 @@ li {
   z-index: 10;
 }
 #nowCapturedImage:not(.noImage):hover::after {
-  content: '';
+  content: "";
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
@@ -121,21 +122,36 @@ li {
 #captureBtn:hover {
   filter: saturate(180%);
 }
-#analyze-button {
-  color: white;
-}
 
 /* -------검색결과 목록-------- */
+
 .searchResult {
   background-color: #fafafa;
   border-radius: 50px 50px 0 0;
   flex-grow: 1;
-  overflow-x: hidden;
-  /* overflow-y: auto; */
+  overflow: hidden;
+  position: relative;
+  /* 직접붙이고 되는지 둘다 같이되는지 확인 필요 */
+  transform: translate(0, 100%);
+  transform: translate(0, 0);
+}
+@keyframes showUp {
+  0% {
+    transform: translate(0, 100%);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.showUp {
+  animation: showUp 0.3s ease-in forwards;
+}
+.showDown {
+  animation: showUp reverse 0.3s ease-in forwards;
 }
 
 /* 관련 탭 */
-div[role='tablist'] {
+div[role="tablist"] {
   width: calc(100% - 38px);
   overflow-x: auto;
   display: flex;
@@ -144,7 +160,7 @@ div[role='tablist'] {
   margin: 0;
   padding: 30px 10px 10px 28px;
 }
-div[role='tablist'] button {
+div[role="tablist"] button {
   height: 44px;
   padding: 16px;
   display: flex;
@@ -228,4 +244,34 @@ div[role='tablist'] button {
   text-overflow: ellipsis;
   word-break: break-all;
   width: calc(100% - 20px);
+}
+
+/* 검색결과 두개  좌우로 나오기 안보이기 */
+@keyframes firstSlideOut {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100%, 0);
+  }
+}
+@keyframes secondSlideIn {
+  0% {
+    transform: translate(100%, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.firstSlideOut {
+  animation: firstSlideOut 0.3s ease-in forwards;
+}
+.firstSlideIn {
+  animation: firstSlideOut reverse 0.3s ease-in forwards;
+}
+.secondSlideIn {
+  animation: secondSlideIn 0.3s ease-in forwards;
+}
+.firstSlideOut {
+  animation: secondSlideIn reverse 0.3s ease-in forwards;
 }

@@ -37,7 +37,7 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 });
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (changeInfo.status === 'complete') {
+  if (changeInfo.status === "complete") {
     await injectCSS(tabId);
   }
 });
@@ -55,29 +55,29 @@ document.getElementById('captureBtn').addEventListener('click', async () => {
 });
 
 function initializeCapture() {
-  const isAlreadyOverlay = document.querySelector('.capture-overlay');
-  console.log(isAlreadyOverlay, 'isAlreadyOverlay');
+  const isAlreadyOverlay = document.querySelector(".capture-overlay");
+  console.log(isAlreadyOverlay, "isAlreadyOverlay");
   if (isAlreadyOverlay) return;
   // 초기 셋팅
   let startX,
     startY,
     isSelecting = false;
-  const overlay = document.createElement('div');
-  overlay.className = 'capture-overlay';
+  const overlay = document.createElement("div");
+  overlay.className = "capture-overlay";
 
-  const selection = document.createElement('div');
-  selection.className = 'capture-selection';
+  const selection = document.createElement("div");
+  selection.className = "capture-selection";
   overlay.appendChild(selection);
   document.body.appendChild(overlay);
 
   // pointerdown시 실행 함수
   const startSelecting = (e) => {
-    console.log('start', e);
+    console.log("start", e);
     isSelecting = true;
     startX = e.clientX;
     startY = e.clientY;
-    selection.style.left = clientX + 'px';
-    selection.style.top = clientY + 'px';
+    selection.style.left = clientX + "px";
+    selection.style.top = clientY + "px";
   };
   // pointermove시 실행 함수
   const updateSelection = (e) => {
@@ -90,15 +90,15 @@ function initializeCapture() {
     const width = currentX - startX;
     const height = currentY - startY;
 
-    selection.style.width = Math.abs(width) + 'px';
-    selection.style.height = Math.abs(height) + 'px';
-    selection.style.left = (width < 0 ? currentX : startX) + 'px';
-    selection.style.top = (height < 0 ? currentY : startY) + 'px';
+    selection.style.width = Math.abs(width) + "px";
+    selection.style.height = Math.abs(height) + "px";
+    selection.style.left = (width < 0 ? currentX : startX) + "px";
+    selection.style.top = (height < 0 ? currentY : startY) + "px";
   };
   // pointerup시 실행 함수
   const completeSelection = async (e) => {
-    console.log(isSelecting, 'isSelecting');
-    console.log(e, 'mouseup');
+    console.log(isSelecting, "isSelecting");
+    console.log(e, "mouseup");
     if (!isSelecting) {
       // 돔요소 없애기
       overlay.remove();
@@ -107,7 +107,7 @@ function initializeCapture() {
     }
     isSelecting = false;
     const rect = selection.getBoundingClientRect();
-    console.log(rect, 'getBoundingClientRect');
+    console.log(rect, "getBoundingClientRect");
 
     const currentX = e.clientX;
     const currentY = e.clientY;
@@ -116,7 +116,7 @@ function initializeCapture() {
     // 캡처 영역이 넓을 경우 요청을 사이드패널로 전송
     if (!rect.width <= 2 && !rect.height <= 2) {
       chrome.runtime.sendMessage({
-        type: 'requestCapture',
+        type: "requestCapture",
         rect: {
           left: width < 0 ? currentX : startX,
           top: height < 0 ? currentY : startY,
@@ -132,22 +132,22 @@ function initializeCapture() {
     overlay.remove();
     selection.remove();
     // 이벤트 리스너 제거
-    overlay.removeEventListener('pointerdown', startSelecting);
-    overlay.removeEventListener('pointermove', updateSelection);
-    overlay.removeEventListener('pointerup', completeSelection);
+    overlay.removeEventListener("pointerdown", startSelecting);
+    overlay.removeEventListener("pointermove", updateSelection);
+    overlay.removeEventListener("pointerup", completeSelection);
   };
 
-  overlay.addEventListener('pointerdown', startSelecting);
-  overlay.addEventListener('pointermove', updateSelection);
-  overlay.addEventListener('pointerup', completeSelection);
+  overlay.addEventListener("pointerdown", startSelecting);
+  overlay.addEventListener("pointermove", updateSelection);
+  overlay.addEventListener("pointerup", completeSelection);
 }
 
 // 사이드패널에서 캡처 처리
 chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
-  if (message.type === 'requestCapture') {
+  if (message.type === "requestCapture") {
     try {
       const dataUrl = await chrome.tabs.captureVisibleTab(null, {
-        format: 'png',
+        format: "png",
       });
       const { croppedDataUrl } = cropImage(dataUrl);
 
@@ -196,30 +196,30 @@ function cropImage(dataUrl) {
 
 // 2-2. 캡처된 이미지를 사이드패널에 표시하는 함수
 function displayCapturedImage(dataUrl) {
-  const nowCapturedImage = document.getElementById('nowCapturedImage');
+  const nowCapturedImage = document.getElementById("nowCapturedImage");
   // 기존 내용 초기화
   nowCapturedImage.innerHTML = '';
   nowCapturedImage.innerHTML = '';
 
   // 캡쳐이미지
-  const capturedImg = document.createElement('img');
+  const capturedImg = document.createElement("img");
   const timestamp = new Date().toLocaleString();
   capturedImg.src = dataUrl;
   capturedImg.alt = 'screen image' + timestamp;
   capturedImg.alt = 'screen image' + timestamp;
 
   // x버튼
-  const xButton = document.createElement('button');
-  xButton.type = 'button';
-  xButton.id = 'deleteButton';
-  const xImg = document.createElement('img');
-  xImg.src = '../images/x.svg';
-  xImg.alt = 'delete icon';
+  const xButton = document.createElement("button");
+  xButton.type = "button";
+  xButton.id = "deleteButton";
+  const xImg = document.createElement("img");
+  xImg.src = "../images/x.svg";
+  xImg.alt = "delete icon";
   xButton.appendChild(xImg);
 
   nowCapturedImage.appendChild(capturedImg);
   nowCapturedImage.appendChild(xButton);
-  nowCapturedImage.className = '';
+  nowCapturedImage.className = "";
 
   // 로컬 스토리지에 저장
   saveToStorage(dataUrl, timestamp);
@@ -297,14 +297,14 @@ async function saveToStorage(dataUrl, timestamp) {
 
 // 삭제 버튼 눌렀을 떄 지우는 함수
 const clickDeleteButton = () => {
-  const nowCapturedImage = document.getElementById('nowCapturedImage');
-  nowCapturedImage.innerHTML = '';
-  nowCapturedImage.className = 'noImage';
+  const nowCapturedImage = document.getElementById("nowCapturedImage");
+  nowCapturedImage.innerHTML = "";
+  nowCapturedImage.className = "noImage";
 
   chrome.storage.local.set({
     capturedImage: {
-      dataUrl: '',
-      timestamp: '',
+      dataUrl: "",
+      timestamp: "",
     },
   });
 };
