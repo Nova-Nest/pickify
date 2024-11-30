@@ -183,6 +183,10 @@ function displayCapturedImage(dataUrl) {
   // 기존 내용 초기화
   const nowCapturedImage = document.getElementById('nowCapturedImage');
   nowCapturedImage.innerHTML = '';
+  const searchedImageList = document.querySelector('.searchedImageList');
+  const relatedCombinationList = document.querySelector('.relatedCombinationList');
+  searchedImageList.innerHTML = '';
+  relatedCombinationList.innerHTML = '';
 
   // 캡쳐이미지
   const capturedImg = document.createElement('img');

@@ -28,10 +28,6 @@ li {
   list-style-type: none;
 }
 
-p {
-  word-break: break-all;
-}
-
 .mainContainer {
   display: flex;
   flex-direction: column;
