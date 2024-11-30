@@ -1,28 +1,20 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
 
 export default [
   {
-    input: "sidepanel/capture.js",
+    input: 'sidepanel/capture.js',
     output: {
-      file: "dist/capture.bundle.js",
-      format: "iife",
+      file: 'dist/capture.bundle.js',
+      format: 'iife',
     },
     plugins: [resolve(), commonjs()],
   },
   {
-    input: "sidepanel/combination.js",
+    input: 'sidepanel/clickTabs.js',
     output: {
-      file: "dist/combination.bundle.js",
-      format: "iife",
-    },
-    plugins: [resolve(), commonjs()],
-  },
-  {
-    input: "sidepanel/buttons.js",
-    output: {
-      file: "dist/buttons.bundle.js",
-      format: "iife",
+      file: 'dist/clickTabs.bundle.js',
+      format: 'iife',
     },
     plugins: [resolve(), commonjs()],
   },

@@ -6,20 +6,10 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "activeTab",
-    "scripting",
-    "sidePanel",
-    "storage",
-    "tabs",
-    "http://34.64.53.95:8080/*"
-  ],
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage", "tabs"],
   "host_permissions": ["<all_urls>"],
   "side_panel": {
     "default_path": "sidepanel/index.html"
-  },
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'; connect-src http://34.64.53.95:8080"
   },
   "action": {
     "default_icon": {
