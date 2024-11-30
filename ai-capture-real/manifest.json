@@ -11,8 +11,7 @@
     "scripting",
     "sidePanel",
     "storage",
-    "tabs",
-    "http://34.64.53.95:8080/*"
+    "tabs"
   ],
   "host_permissions": ["<all_urls>"],
   "side_panel": {
