@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Pickify",
   "version": "0.1",
-  "description": "Try the Gemini Models.",
+  "description": "Pickify is a service that searches images captured in the browser and recommends related products.",
   "background": {
     "service_worker": "background.js"
   },
