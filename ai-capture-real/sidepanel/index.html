@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+    <div class="mainContainer">
+      <!-- 방금 캡쳐한 이미지 -->
+      <div id="nowCapturedImage" class="noImage"></div>
+      <!-- 캡쳐버튼 -->
+      <button id="captureBtn" type="button">
+        <img src="../images/screenshot.svg" alt="screenshot icon" />
+        take a screenshot
+      </button>
+      <!-- 검색 결과 및 탭 -->
+      <div class="searchResult">
+        <div role="tablist">
+          <button type="button" id="searchImgButton" role="tab" class="selectedTab">
+            Related Image
+          </button>
+          <button type="button" id="recommendCombinationButton" role="tab">
+            Recommend Commbination
+          </button>
+        </div>
+        <!-- 하단 영역 -->
+        <div class="innerContent">
+          <!-- 이미지 검색 결과 리스트 -->
+          <ul class="searchedImageList"></ul>
+
+          <!-- 추천 조합 응답 -->
+          <div class="relatedCombinationList"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../dist/capture.bundle.js"></script>
+    <script src="../dist/clickTabs.bundle.js"></script>
+  </body>
+</html>
