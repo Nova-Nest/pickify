@@ -1,0 +1,15 @@
+### 리뷰 요약 요청
+POST http://localhost:8080/api/summarize
+Content-Type: application/json
+
+{
+  "text": "이 제품은 정말 좋습니다. 사용감도 훌륭하고 디자인도 예뻐요. 가격 대비 성능이 최고인 것 같아요. 하지만 배터리가 조금 약한 점이 아쉽습니다."
+}
+
+### 영어 리뷰 감성분적 (긍정, 부정)
+POST http://localhost:8080/api/nlp-summarize
+Content-Type: application/json
+
+{
+  "text": "The product has excellent performance and beautiful design, but the battery life is disappointing and quite short."
+}
