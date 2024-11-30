@@ -1,7 +1,7 @@
 export async function getData(url) {
   try {
     // GET 요청
-    const response = await fetch('http://34.64.53.95:8080' + url, {
+    const response = await fetch('https://34.64.53.95:8080' + url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

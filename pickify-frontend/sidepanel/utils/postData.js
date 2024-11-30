@@ -1,6 +1,6 @@
 export async function postData(url, data) {
   try {
-    const response = await fetch('http://34.64.53.95:8080' + url, {
+    const response = await fetch('https://34.64.53.95:8080' + url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
