@@ -6,8 +6,7 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": ["scripting", "sidePanel", "storage", "tabs"],
-  "host_permissions": ["<all_urls>"],
+  "permissions": ["activeTab", "scripting", "sidePanel", "storage", "tabs"],
   "side_panel": {
     "default_path": "sidepanel/index.html"
   },
