@@ -182,11 +182,19 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 function displayCapturedImage(dataUrl) {
   // 기존 내용 초기화
   const nowCapturedImage = document.getElementById('nowCapturedImage');
-  nowCapturedImage.innerHTML = '';
   const searchedImageList = document.querySelector('.searchedImageList');
   const relatedCombinationList = document.querySelector('.relatedCombinationList');
+  nowCapturedImage.innerHTML = '';
   searchedImageList.innerHTML = '';
   relatedCombinationList.innerHTML = '';
+
+  // 탭과 결과 위치를 이미지검색리스트로 옮기기
+  const searchImgButton = document.querySelector('#searchImgButton');
+  const recommendCombinationButton = document.querySelector('#recommendCombinationButton');
+  searchImgButton.className = 'selectedTab';
+  recommendCombinationButton.className = '';
+  const searchResultBox = document.querySelector('.innerContent');
+  searchResultBox.style.transform = 'translate(0, 0)';
 
   // 캡쳐이미지
   const capturedImg = document.createElement('img');
