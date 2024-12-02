@@ -1,0 +1,37 @@
+POST http://localhost:8080/hello/save
+Content-Type: application/json
+
+{
+}
+
+###
+
+POST http://localhost:8080/api/img-category
+Content-Type: application/json
+
+{
+  "keywords": [
+    "bag",
+    "leather",
+    "tote",
+    "shoulder",
+    "handbag"
+  ]
+}
+
+###
+POST http://localhost:8080/api/img-category
+Content-Type: application/json
+
+{
+  "keywords": [
+      "macbook air",
+      "apple",
+      "laptop",
+      "computer",
+      "rose gold",
+      "keyboard"
+  ]
+}
+
+

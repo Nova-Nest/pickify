@@ -1,0 +1,11 @@
+services:
+  mongodb:
+    image: mongo:6.0 # MongoDB 이미지 (버전을 변경할 수 있음)
+    container_name: pickify-mongodb # 컨테이너 이름
+    ports:
+      - "22222:27017" # 호스트:컨테이너 포트 매핑
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root # 관리자 사용자 이름
+      MONGO_INITDB_ROOT_PASSWORD: admin # 관리자 비밀번호
+    volumes:
+      - ./etc/db:/data/db # 데이터 저장소 경로 매핑
